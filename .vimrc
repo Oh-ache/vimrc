@@ -1,53 +1,25 @@
-"====================基础配置========================================================
-set shell=/bin/sh
-set encoding=utf-8
-filetype plugin indent on
-set completeopt-=preview
-set t_Co=256
-syntax enable                  " 语法高亮
-set number                     " 添加行号
-set relativenumber             " 相对行号
-set guifont=Monaco\ 12         " 设置字体
-filetype on                    " 检测文件类型
-filetype plugin on             " 允许插件
-set autoread                   " 文件修改之后自动读入
-set nobackup                   " 设置取消备份，禁止临时文件生成
-set noswapfile                 " 设置取消备份，禁止临时文件生成
-set showmode                   " 左下角显示当前Vim模式
-set showmatch                  " 设置代码匹配,包括括号匹配情况
-set tabstop=4                  " 设置tab4个空格
-set autoindent                 " 自动对齐
-set shiftwidth=4               " 4
-set softtabstop=4              " 4
 let mapleader = '='            " 设置leader键为=
-set backspace=indent,eol,start " 重置删除键
-set lazyredraw                 " 懒加载
-set textwidth=120              " 每行80字符
-set wrap                       " 自动折行
-set nospell                    " 关闭拼写检查
-set nojoinspaces
-set nofoldenable
-set regexpengine=1
-
-" 快捷键定义
-nmap <leader>r :source ~/.vimrc<CR>
-nmap <leader>wq :wq<CR>
-nmap <leader>q :q!<CR>
-nmap <leader>w :w<CR>
-imap <S-tab> <c-x><c-]>
-nmap <c-e> :bp<CR>
-nmap <c-r> :bn<CR>
-nmap <C-h> <C-W>h
-nmap <c-l> <C-W>l
-nmap <Leader>e <Plug>(coc-translator-e)
-nmap gc <Plug>(coc-git-commit)
 
 call plug#begin('~/.vim/plugged')
 "====================代码补全插件==================================================
 
-" Plug 'neoclide/coc.nvim', {'tag': '*', 'do': { -> coc#util#install()}}
 Plug 'neoclide/coc.nvim', {'tag': '*', 'branch': 'release'}
 set updatetime=300
+
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> gr <Plug>(coc-references)
+
+" K显示预览
+nnoremap <silent> K :call <SID>show_documentation()<CR>
+function! s:show_documentation()
+  if (index(['vim','help'], &filetype) >= 0)
+    execute 'h '.expand('<cword>')
+  else
+    call CocAction('doHover')
+  endif
+endfunction
 
 "====================语法检测和代码格式化===========================================
 
@@ -110,16 +82,17 @@ nmap <silent> <C-k> <Plug>(ale_previous_wrap)
 Plug 'scrooloose/nerdtree'
 let NERDTreeWinPos='left'
 let NERDTreeWinSize=25
-"let NERDTreeShowHidden=1
+" let NERDTreeShowHidden=1
+let NERDTreeMinimalUI=1
 nmap <leader>n :NERDTreeToggle<CR>
-autocmd StdinReadPre * let s:std_in=1
-autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
-autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists("s:std_in") | exe 'NERDTree' argv()[0] | wincmd p | ene | endif
+" autocmd StdinReadPre * let s:std_in=1
+" autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
+" autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists("s:std_in") | exe 'NERDTree' argv()[0] | wincmd p | ene | endif
 "最后自动关闭nerdtree
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
-autocmd vimenter * NERDTree
+" autocmd vimenter * NERDTree
 "打开文本自动跳转工作区
-autocmd VimEnter * wincmd w
+" autocmd VimEnter * wincmd w
 
 Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
 
@@ -157,7 +130,6 @@ autocmd VimEnter * call AirlineInit()
 Plug 'vim-airline/vim-airline-themes'
 let g:airline_powerline_fonts = 1
 let g:airline_theme='simple'
-" Plug 'itchyny/lightline.vim'
 
 "====================git提示=========================================================
 
@@ -216,7 +188,7 @@ let g:go_highlight_build_constraints = 1
 "let g:go_fmt_command = 'goimports'
 let g:go_fmt_fail_silently = 1
 let g:go_fmt_autosave = 0
-let g:go_bin_path = expand('/usr/local/go')
+let g:go_bin_path = expand('/usr/local/go/bin/go')
 let g:go_fmt_command = 'goimports'
 
 Plug 'dgryski/vim-godef'
@@ -241,6 +213,17 @@ Plug 'stamblerre/gocode', { 'rtp': 'vim', 'do': '~/.vim/plugged/gocode/vim/symli
 "F11    show context variables (e.g. after 'eval')
 "F12    evaluate variable under cursor
 
+"====================markdown=======================================================
+
+" 语法高亮插件
+Plug 'godlygeek/tabular'
+Plug 'plasticboy/vim-markdown'
+
+" markdown预览
+Plug 'suan/vim-instant-markdown'
+let g:vim_markdown_conceal = 0
+
+
 "====================vue============================================================
 
 Plug 'posva/vim-vue'
@@ -258,17 +241,16 @@ let g:rehash256 = 1
 "显示缩进
 Plug 'yggdroot/indentline'
 
-"根据文件内容和文件名查找文件
-Plug 'mhinz/vim-grepper', { 'on': ['Grepper', '<plug>(GrepperOperator)'] }
-Plug 'Yggdroot/LeaderF', { 'do': './install.sh' }
-noremap go :<C-U>Leaderf! rg --stayOpen --recall<CR>
-let g:Lf_ReverseOrder = 1
-" <leder>f 开启搜索
-" <C-J>    选择下一个
-" <C-K>    选择上一个
-
 " If installed using Homebrew
 Plug '/usr/local/opt/fzf'
+Plug 'junegunn/fzf.vim'
+nmap <leader>f :Files<CR>
+command! -bang -nargs=* Ag
+  \ call fzf#vim#ag(<q-args>,
+  \                 <bang>0 ? fzf#vim#with_preview('up:60%')
+  \                         : fzf#vim#with_preview('right:50%:hidden', '?'),
+  \                 <bang>0)
+nnoremap <silent> <Leader>s :Ag<CR>
 
 
 "代码对齐插件
@@ -276,7 +258,7 @@ Plug 'godlygeek/tabular'
 " :Tab/
 
 "注释插件
- Plug 'scrooloose/nerdcommenter'
+Plug 'scrooloose/nerdcommenter'
 let g:NERDSpaceDelims = 1
 let g:NERDCompactSexyComs = 1
 let g:NERDDefaultAlign = 'left'
@@ -293,6 +275,9 @@ Plug 'terryma/vim-multiple-cursors'
 "<C-n> 启动/跳转下一个
 "<C-x> 取消最后一个选中跳过下一个
 "<C-p> 撤销最后一个选中
+
+" 高亮下划线单词
+Plug 'itchyny/vim-cursorword'
 
 "删除缓存buffer
 Plug 'arithran/vim-delete-hidden-buffers'
@@ -332,13 +317,19 @@ nnoremap <silent> n :call WordNavigation('forward')<cr>
 nnoremap <silent> N :call WordNavigation('backward')<cr>
 
 Plug 'tpope/vim-surround'
+" yss'		整行添加'
+" ys<n>w'	到第n个单词添加'
+" cs'"		替换最近的'为"
+" ds"		删除最近的"
 
 "删除缓存buffer
 Plug 'arithran/vim-delete-hidden-buffers'
 ":DeleteHiddenBuffers 删除其他所有buffer
 
-Plug 'ntpeters/vim-better-whitespace'
+" 打开文件跳转上次关闭位置
+Plug 'farmergreg/vim-lastplace'
 
+Plug 'ntpeters/vim-better-whitespace'
 
 " Track the engine.
 Plug 'SirVer/ultisnips'
@@ -354,61 +345,84 @@ let g:UltiSnipsEditSplit='vertical'
 
 Plug 'sniphpets/sniphpets'
 
+Plug 'mbbill/undotree'
+nmap <leader>u :UndotreeToggle<CR>
+if has("persistent_undo")
+    set undodir=$HOME."/.undodir"
+    set undofile
+endif
+
 call plug#end()
 
-
-"=====================自动生成头部信息===================================================
+"====================基础配置========================================================
+set shell=/bin/sh
+set encoding=utf-8
+filetype plugin indent on
+set completeopt-=preview
+set t_Co=256
+set fileformat=unix			   " 设置unix符号
+syntax enable                  " 语法高亮
+set number                     " 添加行号
+set relativenumber             " 相对行号
+set guifont=Monaco\ 12         " 设置字体
+filetype on                    " 检测文件类型
+filetype plugin on             " 允许插件
+set autoread                   " 文件修改之后自动读入
+set nobackup                   " 设置取消备份，禁止临时文件生成
+set noswapfile                 " 设置取消备份，禁止临时文件生成
+set showmode                   " 左下角显示当前Vim模式
+set showmatch                  " 设置代码匹配,包括括号匹配情况
+set tabstop=4                  " 设置tab4个空格
+set autoindent                 " 自动对齐
+set shiftwidth=4               " 4
+set softtabstop=4              " 4
+set backspace=indent,eol,start " 重置删除键
+set lazyredraw                 " 懒加载
+set textwidth=120              " 每行80字符
+set wrap                       " 自动折行
+set nospell                    " 关闭拼写检查
+set nojoinspaces
+set nofoldenable
+set regexpengine=1
 colorscheme molokai             " more颜色
-nmap <F2> :call PRUN()<CR>
-func! PRUN()
-	" exec 'w'
-	if &filetype ==# 'sh'
-		:!time bash %
-	elseif &filetype ==# 'python'
-		exec '!time python3 %'
-	elseif &filetype ==# 'php'
-		exec '!time php %'
-	elseif &filetype ==# 'go'
-		exec '!time go run %'
-	elseif &filetype ==# 'js'
-		exec '!time node %'
-	endif
-endfun
+hi Normal ctermfg=252 ctermbg=none
 
-func SetTitle()
-	if &filetype ==# 'sh'
-		call setline(1, '#!/bin/sh')
-		call setline(2, '######################################################')
-		call setline(3, '# Create by VIM')
-		call setline(4, '# Author: ache')
-		call setline(5, '# Created Time : '.strftime('%c'))
-		call setline(6, '# File Name: '.expand('%'))
-		call setline(7, '# Description:')
-		call setline(8, '######################################################')
-		call setline(9, '')
-	elseif &filetype ==# 'lua'
-		call setline(1, '#!//usr/local/bin/lua')
-		call setline(2, '--[[')
-		call setline(3, 'Create by VIM')
-		call setline(4, 'Author: ache')
-		call setline(5, 'Created Time : '.strftime('%c'))
-		call setline(6, 'File Name: '.expand('%'))
-		call setline(7, 'Description:')
-		call setline(8, '--]]')
-		call setline(9, '')
-	elseif &filetype ==# 'php'
-		call setline(1, '<?php')
-		call setline(2, '/**')
-		call setline(3, ' * Created by VIM')
-		call setline(4, ' * User: ache')
-		call setline(5, ' * Date: '.strftime('%Y-%m-%d'))
-		call setline(6, ' * Time: '.strftime('%H-%M'))
-		call setline(7, ' * Description:')
-		call setline(8, ' */')
-		call setline(9, '')
-	endif
-endfun
+" 快捷键定义
+nmap <leader>r :source ~/.vimrc<CR>
+nmap <leader>wq :wq<CR>
+nmap <leader>q :q<CR>
+nmap <leader>w :w<CR>
+nmap <S-tab> <c-x><c-]>
+" buffer快捷键
+nmap dn :bn<CR>:bd#<CR>
+nmap dp :bp<CR>:bd#<CR>
+nmap bb :bp<CR>
+nmap bn :bn<CR>
+nmap <C-h> <C-W>h
+nmap <c-l> <C-W>l
+nmap <leader>e <Plug>(coc-translator-e)
+nmap gc <Plug>(coc-git-commit)
+nmap <leader><Space> :StripWhitespace<CR>
+nmap <leader>t :CocCommand template.templateTop<CR>
+" 驼峰和下划线自动转化
+nmap <leader>pp <ESC>:s/\([a-z]\)_\([a-z]\)/\1\U\2/g<CR>
+nmap <leader>uu <ESC>:s/\([a-z]\)\([A-Z]\)/\1_\u\2/g<CR>
+
+" 禁用vim方向键
+map <Up> <Nop>
+map <Down> <Nop>
+map <Left> <Nop>
+map <Right> <Nop>
+
+" 重置<Esc> <Enter>
+inoremap jj <Esc>
+inoremap kk <CR>
+nnoremap H ^
+nnoremap L $
+nnoremap ;h H
+nnoremap ;l L
+
 augroup AUTOCMD
 	autocmd!
-	autocmd BufNewFile *.sh,*.php,*.lua exec ":call SetTitle()"
+	autocmd VimEnter * :echo '老婆爱你 么么哒。（>^.^<）!'
 augroup END
