@@ -1,15 +1,17 @@
-let mapleader = '='            " 设置leader键为=
+let mapleader = '='
 
 call plug#begin('~/.vim/plugged')
+
 "====================代码补全插件==================================================
 
-Plug 'neoclide/coc.nvim', {'tag': '*', 'branch': 'release'}
+Plug 'neoclide/coc.nvim', {'do': 'yarn install --frozen-lockfile'}
 set updatetime=300
 
 nmap <silent> gd <Plug>(coc-definition)
 nmap <silent> gy <Plug>(coc-type-definition)
 nmap <silent> gi <Plug>(coc-implementation)
 nmap <silent> gr <Plug>(coc-references)
+nmap cc :CocList commands<CR>
 
 " K显示预览
 nnoremap <silent> K :call <SID>show_documentation()<CR>
@@ -50,9 +52,14 @@ let g:ale_fixers = {
 \	'json'       : ['fixjson', 'prettier'],
 \   'python'     : ['yapf'],
 \}
+"   'go'         : ['gofmt', 'goimports'],
 let g:ale_fix_on_save = 1
 let g:ale_linters_explicit = 1
 let g:ale_completion_enabled = 1
+
+let g:ale_lint_on_text_changed = "never"
+let g:ale_lint_on_insert_leave = 0
+let g:ale_lint_on_enter = 1
 
 "语法检测
 let g:ale_linter_aliases = {
@@ -69,20 +76,18 @@ let g:ale_linters = {
 \	'sh'         : ['shellcheck'],
 \	'vim'        : ['vint'],
 \	'json'       : ['prettier'],
-\	'lua'        : ['luacheck'],
-\	'sql'        : ['sqlint'],
 \	'java'       : ['javac'],
 \}
 
 "跳转错误
 nmap <silent> <C-k> <Plug>(ale_previous_wrap)
-" nmap <silent> <C-j> <Plug>(ale_next_wrap)
+nmap <silent> <C-j> <Plug>(ale_next_wrap)
 
 "=====================nerdtree======================================================
 Plug 'scrooloose/nerdtree'
 let NERDTreeWinPos='left'
 let NERDTreeWinSize=25
-" let NERDTreeShowHidden=1
+let NERDTreeShowHidden=1
 let NERDTreeMinimalUI=1
 nmap <leader>n :NERDTreeToggle<CR>
 " autocmd StdinReadPre * let s:std_in=1
@@ -99,17 +104,17 @@ Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
 "nerdtree-git显示文件状态
 Plug 'Xuyuanp/nerdtree-git-plugin'
 let g:NERDTreeIndicatorMapCustom = {
-	\ 'Modified'  : '✹',
-	\ 'Staged'    : '✚',
-	\ 'Untracked' : '✭',
-	\ 'Renamed'   : '➜',
-	\ 'Unmerged'  : '═',
-	\ 'Deleted'   : '✖',
-	\ 'Dirty'     : '✗',
-	\ 'Clean'     : '✔︎',
-	\ 'Ignored'   : '☒',
-	\ 'Unknown'   : '?'
-	\ }
+			\ 'Modified'  : '✹',
+			\ 'Staged'    : '✚',
+			\ 'Untracked' : '✭',
+			\ 'Renamed'   : '➜',
+			\ 'Unmerged'  : '═',
+			\ 'Deleted'   : '✖',
+			\ 'Dirty'     : '✗',
+			\ 'Clean'     : '✔︎',
+			\ 'Ignored'   : '☒',
+			\ 'Unknown'   : '?'
+			\ }
 let g:NERDTreeShowIgnoredStatus = 1
 
 "==================vim-airlin=======================================================
@@ -163,44 +168,33 @@ Plug 'rhysd/fixjson'
 Plug 'z0mbix/vim-shfmt', { 'for': 'sh' }
 let g:shfmt_fmt_on_save = 1
 
-"====================go==============================================================
-
-Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
-" augroup goshutcut
-au FileType go nmap <leader>r <Plug>(go-run)
-au FileType go nmap <leader>b <Plug>(go-build)
-au FileType go nmap <leader>t <Plug>(go-test)
-au FileType go nmap <leader>c <Plug>(go-coverage)
-au FileType go nmap <Leader>ds <Plug>(go-def-split)
-au FileType go nmap <Leader>dv <Plug>(go-def-vertical)
-au FileType go nmap <Leader>dt <Plug>(go-def-tab)
-au FileType go nmap <Leader>gd <Plug>(go-doc)
-au FileType go nmap <Leader>gv <Plug>(go-doc-vertical)
-au FileType go nmap <Leader>i :GoImport
-au FileType go nmap <Leader>d :GoDrop
-" augroup END
-let g:go_disable_autoinstall = 1
-let g:go_highlight_functions = 1
-let g:go_highlight_methods = 1
-let g:go_highlight_structs = 1
-let g:go_highlight_operators = 1
-let g:go_highlight_build_constraints = 1
-"let g:go_fmt_command = 'goimports'
-let g:go_fmt_fail_silently = 1
-let g:go_fmt_autosave = 0
-let g:go_bin_path = expand('/usr/local/go/bin/go')
-let g:go_fmt_command = 'goimports'
-
-Plug 'dgryski/vim-godef'
-" Plug 'cespare/vim-config'
-Plug 'stamblerre/gocode', { 'rtp': 'vim', 'do': '~/.vim/plugged/gocode/vim/symlink.sh' }
-
 "====================debug===========================================================
 "调试代码
 " Plug 'vim-vdebug/vdebug'
-" let g:vdebug_options = {'ide_key': 'PHPSTORM'}
+let g:vdebug_options = {
+\    'port' : 9000,
+\    'timeout' : 20,
+\    'server' : '',
+\    'on_close' : 'stop',
+\    'break_on_open' : 1,
+\    'ide_key' : 'air',
+\    'debug_window_level' : 0,
+\    'debug_file_level' : 0,
+\    'debug_file' : '',
+\    'path_maps' : {'/var/www/html': '/Users/zhaobo/docker/nginx-php/html'},
+\    'watch_window_style' : 'expanded',
+\    'marker_default' : '⬦',
+\    'marker_closed_tree' : '▸',
+\    'marker_open_tree' : '▾',
+\    'sign_breakpoint' : '▷',
+\    'sign_current' : '▶',
+\    'continuous_mode'  : 1,
+\    'simplified_status': 1,
+\    'layout': 'vertical',
+\}
+" let g:vdebug_options = {'ide_key': 'webs'}
 " let g:vdebug_options = {'break_on_open': 0}
-" let g:vdebug_options = {'server': 'http://jw.com'}
+" let g:vdebug_options = {'server': 'dev_asset_api.ihibuilding.cn'}
 " let g:vdebug_options = {'port': '9001'}
 "F2     step over
 "F3     step into
@@ -230,6 +224,9 @@ Plug 'posva/vim-vue'
 let g:vue_disable_pre_processors=1
 autocmd FileType vue syntax sync fromstart
 " autocmd  BufRead,BufNewFile  *.vue setlocal  filetype = vue.html.javascript.css
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+
+
 
 "====================tool===========================================================
 
@@ -352,7 +349,9 @@ if has("persistent_undo")
     set undofile
 endif
 
+
 call plug#end()
+
 
 "====================基础配置========================================================
 set shell=/bin/sh
@@ -360,13 +359,11 @@ set encoding=utf-8
 filetype plugin indent on
 set completeopt-=preview
 set t_Co=256
-set fileformat=unix			   " 设置unix符号
+set fileformat=unix            " 设置unix符号
 syntax enable                  " 语法高亮
 set number                     " 添加行号
 set relativenumber             " 相对行号
-set guifont=Monaco\ 12         " 设置字体
-filetype on                    " 检测文件类型
-filetype plugin on             " 允许插件
+set guifont=NewYork\ 12        " 设置字体
 set autoread                   " 文件修改之后自动读入
 set nobackup                   " 设置取消备份，禁止临时文件生成
 set noswapfile                 " 设置取消备份，禁止临时文件生成
@@ -393,13 +390,16 @@ nmap <leader>wq :wq<CR>
 nmap <leader>q :q<CR>
 nmap <leader>w :w<CR>
 nmap <S-tab> <c-x><c-]>
+
+imap <C-W> <Esc>:w<CR>
 " buffer快捷键
 nmap dn :bn<CR>:bd#<CR>
-nmap dp :bp<CR>:bd#<CR>
-nmap bb :bp<CR>
-nmap bn :bn<CR>
-nmap <C-h> <C-W>h
-nmap <c-l> <C-W>l
+nmap db :bp<CR>:bd#<CR>
+nmap <space>b :bp<CR>
+nmap <space>n :bn<CR>
+nmap <space>v <C-W>h
+nmap <space>m <C-W>l
+nmap <space>o :normal @o<CR>
 nmap <leader>e <Plug>(coc-translator-e)
 nmap gc <Plug>(coc-git-commit)
 nmap <leader><Space> :StripWhitespace<CR>
@@ -415,14 +415,9 @@ map <Left> <Nop>
 map <Right> <Nop>
 
 " 重置<Esc> <Enter>
-inoremap jj <Esc>
+inoremap ii <Esc>
 inoremap kk <CR>
 nnoremap H ^
 nnoremap L $
 nnoremap ;h H
 nnoremap ;l L
-
-augroup AUTOCMD
-	autocmd!
-	autocmd VimEnter * :echo '老婆爱你 么么哒。（>^.^<）!'
-augroup END
