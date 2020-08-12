@@ -12,6 +12,8 @@ nmap <silent> gy <Plug>(coc-type-definition)
 nmap <silent> gi <Plug>(coc-implementation)
 nmap <silent> gr <Plug>(coc-references)
 nmap cc :CocList commands<CR>
+nmap <leader>e <Plug>(coc-translator-e)
+nmap <leader>t :CocCommand template.templateTop<CR>
 
 " K显示预览
 nnoremap <silent> K :call <SID>show_documentation()<CR>
@@ -153,11 +155,14 @@ Plug 'cohama/agit.vim'
 "====================taglist=========================================================
 
 "自动刷新tag
-Plug 'craigemery/vim-autotag'
-let g:autotagTagsFile='tags'
+" Plug 'craigemery/vim-autotag'
+" let g:autotagTagsFile='tags'
 
 Plug 'liuchengxu/vista.vim'
 map <leader>v :Vista!!<CR>
+" let g:vista#renderer#enable_icon = 1
+" let g:vista_default_executive = 'ctags'
+
 
 "====================json============================================================
 
@@ -216,17 +221,6 @@ Plug 'plasticboy/vim-markdown'
 " markdown预览
 Plug 'suan/vim-instant-markdown'
 let g:vim_markdown_conceal = 0
-
-
-"====================vue============================================================
-
-Plug 'posva/vim-vue'
-let g:vue_disable_pre_processors=1
-autocmd FileType vue syntax sync fromstart
-" autocmd  BufRead,BufNewFile  *.vue setlocal  filetype = vue.html.javascript.css
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
-
-
 
 "====================tool===========================================================
 
@@ -359,6 +353,7 @@ set encoding=utf-8
 filetype plugin indent on
 set completeopt-=preview
 set t_Co=256
+colorscheme molokai            " more颜色
 set fileformat=unix            " 设置unix符号
 syntax enable                  " 语法高亮
 set number                     " 添加行号
@@ -381,7 +376,6 @@ set nospell                    " 关闭拼写检查
 set nojoinspaces
 set nofoldenable
 set regexpengine=1
-colorscheme molokai             " more颜色
 hi Normal ctermfg=252 ctermbg=none
 
 " 快捷键定义
@@ -397,13 +391,11 @@ nmap dn :bn<CR>:bd#<CR>
 nmap db :bp<CR>:bd#<CR>
 nmap <space>b :bp<CR>
 nmap <space>n :bn<CR>
+" 切换左右窗口
 nmap <space>v <C-W>h
 nmap <space>m <C-W>l
-nmap <space>o :normal @o<CR>
-nmap <leader>e <Plug>(coc-translator-e)
 nmap gc <Plug>(coc-git-commit)
 nmap <leader><Space> :StripWhitespace<CR>
-nmap <leader>t :CocCommand template.templateTop<CR>
 " 驼峰和下划线自动转化
 nmap <leader>pp <ESC>:s/\([a-z]\)_\([a-z]\)/\1\U\2/g<CR>
 nmap <leader>uu <ESC>:s/\([a-z]\)\([A-Z]\)/\1_\u\2/g<CR>
