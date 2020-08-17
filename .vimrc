@@ -51,7 +51,7 @@ let g:ale_fixers = {
 \   'vue'        : ['eslint', 'prettier'],
 \   'php'        : ['php_cs_fixer'],
 \   'go'         : ['gofmt', 'goimports'],
-\	'json'       : ['fixjson', 'prettier'],
+\	'json'       : ['prettier'],
 \   'python'     : ['yapf'],
 \}
 "   'go'         : ['gofmt', 'goimports'],
@@ -142,36 +142,20 @@ let g:airline_theme='simple'
 
 " 侧边提示
 Plug 'tpope/vim-fugitive'
-" git包转
+" git包装
 Plug 'airblade/vim-gitgutter'
-nmap <leader>gs :Gstatus<CR>
-nmap <leader>gc :Gcommit<CR>
-nmap <leader>gp :Gpush<CR>
+nmap gs :Gstatus<CR>
+nmap gc :Gcommit<CR>
+nmap gp :Gpush<CR>
 " :Agit 查看历史
 Plug 'cohama/agit.vim'
 
-"Plug 'jaxbot/github-issues.vim'
-
 "====================taglist=========================================================
-
-"自动刷新tag
-" Plug 'craigemery/vim-autotag'
-" let g:autotagTagsFile='tags'
 
 Plug 'liuchengxu/vista.vim'
 map <leader>v :Vista!!<CR>
 " let g:vista#renderer#enable_icon = 1
 " let g:vista_default_executive = 'ctags'
-
-
-"====================json============================================================
-
-Plug 'rhysd/fixjson'
-
-"====================sh==============================================================
-
-Plug 'z0mbix/vim-shfmt', { 'for': 'sh' }
-let g:shfmt_fmt_on_save = 1
 
 "====================debug===========================================================
 "调试代码
@@ -215,7 +199,6 @@ let g:vdebug_options = {
 "====================markdown=======================================================
 
 " 语法高亮插件
-Plug 'godlygeek/tabular'
 Plug 'plasticboy/vim-markdown'
 
 " markdown预览
@@ -268,7 +251,7 @@ Plug 'terryma/vim-multiple-cursors'
 "<C-p> 撤销最后一个选中
 
 " 高亮下划线单词
-Plug 'itchyny/vim-cursorword'
+" Plug 'itchyny/vim-cursorword'
 
 "删除缓存buffer
 Plug 'arithran/vim-delete-hidden-buffers'
@@ -321,6 +304,7 @@ Plug 'arithran/vim-delete-hidden-buffers'
 Plug 'farmergreg/vim-lastplace'
 
 Plug 'ntpeters/vim-better-whitespace'
+nmap <leader><Space> :StripWhitespace<CR>
 
 " Track the engine.
 Plug 'SirVer/ultisnips'
@@ -333,8 +317,6 @@ let g:UltiSnipsExpandTrigger='<tab>'
 
 " If you want :UltiSnipsEdit to split your window.
 let g:UltiSnipsEditSplit='vertical'
-
-Plug 'sniphpets/sniphpets'
 
 Plug 'mbbill/undotree'
 nmap <leader>u :UndotreeToggle<CR>
@@ -353,6 +335,7 @@ set encoding=utf-8
 filetype plugin indent on
 set completeopt-=preview
 set t_Co=256
+set vb t_vb=				   " 关闭提示声
 colorscheme molokai            " more颜色
 set fileformat=unix            " 设置unix符号
 syntax enable                  " 语法高亮
@@ -394,8 +377,6 @@ nmap <space>n :bn<CR>
 " 切换左右窗口
 nmap <space>v <C-W>h
 nmap <space>m <C-W>l
-nmap gc <Plug>(coc-git-commit)
-nmap <leader><Space> :StripWhitespace<CR>
 " 驼峰和下划线自动转化
 nmap <leader>pp <ESC>:s/\([a-z]\)_\([a-z]\)/\1\U\2/g<CR>
 nmap <leader>uu <ESC>:s/\([a-z]\)\([A-Z]\)/\1_\u\2/g<CR>
