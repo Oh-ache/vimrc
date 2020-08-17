@@ -101,6 +101,7 @@ autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isT
 "打开文本自动跳转工作区
 " autocmd VimEnter * wincmd w
 
+" 文件高亮
 Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
 
 "nerdtree-git显示文件状态
@@ -118,6 +119,9 @@ let g:NERDTreeIndicatorMapCustom = {
 			\ 'Unknown'   : '?'
 			\ }
 let g:NERDTreeShowIgnoredStatus = 1
+
+" 添加文件图标
+Plug 'ryanoasis/vim-devicons'
 
 "==================vim-airlin=======================================================
 
@@ -158,7 +162,7 @@ map <leader>v :Vista!!<CR>
 " let g:vista_default_executive = 'ctags'
 
 "====================debug===========================================================
-"调试代码
+" 调试代码
 " Plug 'vim-vdebug/vdebug'
 let g:vdebug_options = {
 \    'port' : 9000,
@@ -215,7 +219,7 @@ let g:rehash256 = 1
 "显示缩进
 Plug 'yggdroot/indentline'
 
-" If installed using Homebrew
+" 搜索
 Plug '/usr/local/opt/fzf'
 Plug 'junegunn/fzf.vim'
 nmap <leader>f :Files<CR>
@@ -280,11 +284,11 @@ let g:bookmark_location_list = 1
 Plug 'junegunn/limelight.vim'
 " :Limelight 开启黑暗模式
 
-Plug 'ryanoasis/vim-devicons'
-
+" 快速移动
 Plug 'easymotion/vim-easymotion'
 nmap tt <Plug>(easymotion-t2)
 
+" 选择替换
 Plug 'lfv89/vim-interestingwords'
 nnoremap <silent> <leader>a :call InterestingWords('n')<cr>
 nnoremap <silent> n :call WordNavigation('forward')<cr>
@@ -303,6 +307,7 @@ Plug 'arithran/vim-delete-hidden-buffers'
 " 打开文件跳转上次关闭位置
 Plug 'farmergreg/vim-lastplace'
 
+" 删除空格
 Plug 'ntpeters/vim-better-whitespace'
 nmap <leader><Space> :StripWhitespace<CR>
 
@@ -318,6 +323,7 @@ let g:UltiSnipsExpandTrigger='<tab>'
 " If you want :UltiSnipsEdit to split your window.
 let g:UltiSnipsEditSplit='vertical'
 
+" 查看修改记录
 Plug 'mbbill/undotree'
 nmap <leader>u :UndotreeToggle<CR>
 if has("persistent_undo")
