@@ -11,6 +11,8 @@ nmap <silent> gd <Plug>(coc-definition)
 nmap <silent> gy <Plug>(coc-type-definition)
 nmap <silent> gi <Plug>(coc-implementation)
 nmap <silent> gr <Plug>(coc-references)
+nnoremap <silent> K :call <SID>show_documentation()<CR>
+
 nmap cc :CocList commands<CR>
 nmap <leader>e <Plug>(coc-translator-e)
 nmap <leader>t :CocCommand template.templateTop<CR>
@@ -82,8 +84,8 @@ let g:ale_linters = {
 \}
 
 "跳转错误
-nmap <silent> <C-k> <Plug>(ale_previous_wrap)
-nmap <silent> <C-j> <Plug>(ale_next_wrap)
+nmap <silent> <C-h> <Plug>(ale_previous_wrap)
+" nmap <silent> <C-j> <Plug>(ale_next_wrap)
 
 "=====================nerdtree======================================================
 Plug 'scrooloose/nerdtree'
@@ -106,7 +108,7 @@ Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
 
 "nerdtree-git显示文件状态
 Plug 'Xuyuanp/nerdtree-git-plugin'
-let g:NERDTreeIndicatorMapCustom = {
+let g:NERDTreeGitStatusIndicatorMapCustom= {
 			\ 'Modified'  : '✹',
 			\ 'Staged'    : '✚',
 			\ 'Untracked' : '✭',
@@ -118,7 +120,7 @@ let g:NERDTreeIndicatorMapCustom = {
 			\ 'Ignored'   : '☒',
 			\ 'Unknown'   : '?'
 			\ }
-let g:NERDTreeShowIgnoredStatus = 1
+let g:NERDTreeGitStatusShowIgnored= 1
 
 " 添加文件图标
 Plug 'ryanoasis/vim-devicons'
@@ -229,7 +231,6 @@ command! -bang -nargs=* Ag
   \                         : fzf#vim#with_preview('right:50%:hidden', '?'),
   \                 <bang>0)
 nnoremap <silent> <Leader>s :Ag<CR>
-
 
 "代码对齐插件
 Plug 'godlygeek/tabular'
@@ -369,7 +370,7 @@ hi Normal ctermfg=252 ctermbg=none
 
 " 快捷键定义
 nmap <leader>r :source ~/.vimrc<CR>
-nmap <leader>wq :wq<CR>
+nmap wq :wq<CR>
 nmap <leader>q :q<CR>
 nmap <leader>w :w<CR>
 nmap <S-tab> <c-x><c-]>
